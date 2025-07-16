@@ -101,3 +101,114 @@ orders.sales
 FROM customers
 FULL OUTER JOIN orders
 ON customers.id = orders.customer_id
+
+
+
+-- f) Left Anti Joint -> Returns Rows from left that has no match on right 
+-- Q) Get all the customers who have not placed any order 
+SELECT 
+c.id,
+c.first_name,
+c.country,
+c.score
+FROM customers AS c
+LEFT JOIN orders AS o
+ON c.id = o.customer_id
+WHERE o.customer_id IS NULL
+--ON customers.id = orders.customer_id
+--WHERE orders.customer_id IS NULL
+
+
+
+--h) Right Anti Join -> Returns the rows of the right table that  is not matched by the left table 
+--Q) Get all orders without matching customers 
+SELECT * 
+FROM customers
+RIGHT JOIN orders
+ON customers.id = orders.customer_id
+WHERE customers.id IS NULL
+
+--Q) Get all orders without matching customers (using left join ) 
+SELECT * 
+FROM orders
+LEFT JOIN customers
+ON customers.id = orders.customer_id
+WHERE customers.id IS NULL
+
+
+
+-- i)  FULL Outer Anti Join -> Return the rows that don't match in the either table 
+--Q) Find customers without orders and orders without customers 
+SELECT * 
+FROM customers
+FULL OUTER JOIN orders
+ON customers.id = orders.customer_id
+WHERE customers.id IS NULL OR orders.customer_id IS NULL
+
+
+
+
+--Q) Get all customers along with their orders , but only those customers who have placed any orders (without using inner join ) 
+SELECT * 
+FROM customers
+LEFT JOIN orders
+ON customers.id = orders.customer_id
+WHERE orders.customer_id IS NOT NULL 
+
+
+
+-- j) CROSS JOIN -> Combines every row from left to the every row from the right -{ All Possible combinations -> Cartesian Join }-
+--Q) Generate all possible combinations of customers and orders 
+SELECT * 
+FROM customers
+CROSS JOIN orders
+
+
+/*
+Multiple Table 
+
+SELECT * 
+FROM A
+LEFT JOIN B ON 
+LEFT JOIN C ON 
+LEFT JOIN D ON 
+......
+WHERE .... { Where controls what to keep }
+*/
+
+
+
+
+-- USING MULTIPE TABLES 
+-- Q) Using salesDB retrive a list of all orders , along with the related products ,customers , and employee details
+/*
+For each oder display :
+Order Id 
+Customer's Name 
+Product Name 
+Sales Amount 
+Product Price 
+Salesperson's name 
+*/
+
+USE SalesDB
+SELECT * FROM Sales.Customers
+SELECT * FROM Sales.Employees
+SELECT * FROM Sales.Orders
+SELECT * FROM Sales.Products
+SELECT * FROM Sales.OrdersArchive
+
+
+SELECT 
+Sales.Orders.OrderID,
+Sales.Orders.Sales,
+Sales.Customers.FirstName AS Customer_firstName , 
+Sales.Customers.LastName AS Customer_lastName,
+Sales.Products.Product,
+Sales.Products.Price,
+Sales.Employees.FirstName AS Employee_firstName,
+Sales.Employees.LastName AS Employee_lastName
+FROM Sales.Orders
+LEFT JOIN Sales.Customers ON Sales.Orders.CustomerID = Sales.Customers.CustomerID
+LEFT JOIN Sales.Employees ON Sales.Orders.SalesPersonID = Sales.Employees.EmployeeID
+LEFT JOIN Sales.Products ON Sales.Orders.ProductID = Sales.Products.ProductID
