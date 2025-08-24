@@ -12,6 +12,16 @@ CASE
     .
     ELSE result
 END
+
+
+Rule -: The data of the result must be matching 
+
+USE CASES -: 
+* Drive new information
+*Categorizing Data
+* Mapping Values 
+* Handling Nulls
+* Conditional Aggregations 
 */
 
 --Q) Generate a report showing the total sales for each category 
